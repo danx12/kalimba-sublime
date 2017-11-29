@@ -1,0 +1,7 @@
+{
+	"shell_cmd": "C:/ADK4.0.0/tools/bin/make -R BLUELAB=C:/ADK4.0.0/tools -f my_first_dsp_app_kalimba.release.mak build",
+	"selector": "source.kal",
+	"file_patterns": ["*.asm"],
+	"file_regex": "(\\w+\\.h|\\w+.asm)\\:([0-9]+)\\:\\s+()(undefined.+|Error\\:.+)"
+
+}

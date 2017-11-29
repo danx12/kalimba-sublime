@@ -1,0 +1,171 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+
+# Kalimba Syntax definiton file
+# Written by: Daniel Villarral
+---
+name: Kalimba Assembly Language
+scopeName: source.kal
+fileTypes: [asm]
+uuid: 242e305f-4191-4e03-bf1e-4f5b1db18deb
+
+patterns:
+
+- comment: Comments in the code
+  name: comment.line.kal
+  match: '\/\/.*'
+
+- begin: /\*
+  captures:
+    '0': {name: punctuation.definition.comment.kal}
+  end: \*/
+  name: comment.block.c.kal
+
+- comment: Tags
+  name: entity.name.class.kal
+  match: '(\b.+:)'
+
+- comment: Preprocessor directives with arguments
+  name: source.kal
+  match: '(#include|#define|#ifndef|#elif|#ifdef|#warning|#error|#undef)\b(\s*"[^"]+")?(.*)'
+  captures:
+    '1': {name: keyword.control.import.kal}
+    '2': {name: entity.name.function.kal}
+    '3': {name: entity.name.function.kal}
+
+- comment: Preprocessor directives with NO arguments
+  name: keyword.control.import
+  match: '(#else|#line|#endif)\b'
+
+- comment: Assignement operator =
+  name: keyword.operator.assignment.kal
+  match: '='
+
+- comment: Airthmetic operators \+, \-, \*, \\
+  name: keyword.operator.arithmetic.kal
+  match: '\+|\-|\*|\/|\%'
+
+- comment: Registers like r0, r1, r10
+  name: variable.parameter.register.kal
+  match: '\b(r[0-9]|r10|I[0-7]|L[0-1,4-5]|M[1-3]|B[0-5]|rMAC|rMAC2|rMAC12|rMAC0|DoLoopStart|DOLoopEnd|DivResult|DivRemainder|rMACB2|rMACB12|rMACB0|Null|rLink|rFlags|rMACB|)\b'
+
+- comment: Keywords like conditional keywords like if, do, jump
+  name: keyword.other.control.conditional.kal
+  match: '\b(if|do|jump)\b'
+
+- comment: Function push and pop return to caller
+  name: keyword.operator.conditional.kal
+  match: '\$\b(push_rLink_macro|pop_rLink_and_rts)'
+
+- comment: Keywords call, push, pop
+  name: keyword.operator.conditional.kal
+  match: '\b(call|push|pop|nop|rts)\b'
+
+- comment: Keywords AND, OR, ASHIFT, LSFHIT
+  name: keyword.operator.word.kal
+  match: '\b(AND|OR|ASHIFT|LSHIFT|ABS|XOR|MAX|MIN)\b'
+
+- comment: Variable types .VAR and .CONST
+  name: storage.modifier.variableType.kal
+  match: '(\.VAR(\/DM([1-2])?CIRC|\/DM[1-2]|16|8)?|\.CONST|\.BLOCK|\.ENDBLOCK)'
+
+- comment: Modules
+  name: source.kal
+  begin: '(\.MODULE)\b\s(\$.+)(?=\;)\b'
+  beginCaptures:
+    '1': {name: storage.type.kal}
+    '2': {name: entity.name.function.kal}
+  end: '(\.ENDMODULE)(?=\;)\b'
+  endCaptures:
+    '1': {name: storage.type.kal}
+  patterns:
+  - include: $self
+
+- comment: Flags
+  name: variable.language.kal
+  match: '\b(NZ|Z|C|NC|NE|NEG|POS|V|NV|HI|LS|GE|LT|GT|LE|USERDEF)(?=\s)'
+
+- comment: Address of/ Global variable
+  name: storage.type.kal
+  match: '\&?(\$)|\&'
+
+- comment: All Macros
+  name: support.macros.kal
+  begin: '([A-Z_-]*)\s*(\()'
+  beginCaptures:
+    '1': {name: variable.function.kal}
+    '2': {name: source.kal}
+  end: '(\))'
+  endCaptures:
+    '1': {name: source.kal}
+  patterns:
+  - include: $self
+
+- comment: Constants
+  name: constant.kalConstant.kal
+  match: '\b(?![0-9])(?<!\.)[A-Z0-9\-\_]{2,}'
+
+- comment: Memory access
+  name: storage.modifier.memory.kal
+  begin: '(M\[)'
+  end: '(\])'
+  patterns:
+  - include: $self
+
+- comment: Hex numbers
+  name: constant.character.hexadecimal.kal
+  match: '\b(0x)(?i)[a-f0-9]+'
+
+- comment: Decimal numbers
+  name: constant.character.decimal.kal
+  match: '(?<!\w)[-+]?[0-9]*\.?[0-9]+(?!\w)'
+
+
+ 
+# - comment: Variables like $var, &$var
+#   name: variable.other
+#   match: '(\&)?(\$)([A-Za-z][A-Za-z0-9_]+)'
+#   captures:
+#     '1': {name: punctuation.accessor}
+#     '2': {name: punctuation.accessor}
+
+# - comment: Global variables that may include property access
+#   name:  variable.other
+#   begin: '(\&?\$)([A-Za-z0-9-_]+)(\.)'
+#   beginCaptures:
+#     '1': {name: variable.language}
+#     '2': {name: constant.numeric}
+#   end: '\;|:'
+#   patterns:
+#   - comment: members
+#     name: constant.numeric
+#     match: '([A-Za-z0-9-_]+)'
+  
+# - comment: Global variables that may include property access
+#   name: keyword.other
+#   match: '(\&?\$)([A-Za-z0-9-_]+)(([a-zA-Z0-9-_]+)?)+'
+#   captures:
+#     '0': {name: variable.other.member}
+#     '1': {name: variable.language}
+#     '2': {name: constant.numeric.ssraw}
+#     '3': {name: variable.other.member}
+#     '4': {name: variable.other.member}
+
+# - name: variable.complex.kal
+#   begin: '(\$)(\{)([0-9]+):'
+#   beginCaptures:
+#     '1': {name: keyword.other.kal}
+#     '3': {name: constant.numeric.kal}
+#   end: \}
+#   patterns:
+#   - include: $self
+#   - name: support.other.kal
+#     match: .
+
+# - comment: Sequences like \$, \> and \<
+#   name: constant.character.escape.kal
+#   match: \\[$<>]
+
+# - comment: Unescaped and unmatched magic characters
+#   name: invalid.illegal.kal
+#   match: '[$<>]'
+...

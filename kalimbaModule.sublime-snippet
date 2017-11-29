@@ -1,0 +1,41 @@
+<snippet>
+	<content><![CDATA[
+// *****************************************************************************
+// MODULE:
+//    \$${1:parent_function}.${2:functionName}
+//
+// DESCRIPTION: 
+//              
+//
+//	Inputs:    
+//	
+//	
+//	Outputs:
+//	
+//	
+//
+//	Trashed Registers:
+//	
+//
+// *****************************************************************************
+.MODULE \$M.$1.$2;
+   .CODESEGMENT PM;
+   .DATASEGMENT DM;
+
+   \$$1.$2:
+
+	// Push rLink onto stack
+	\$push_rLink_macro;
+
+
+	// Pop rLink from stack
+  	jump \$pop_rLink_and_rts;
+
+.ENDMODULE;
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>module</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.kal</scope>
+	<description>A snippet to insert a Kalimba Module</description>
+</snippet>
